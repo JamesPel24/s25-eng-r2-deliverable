@@ -3,7 +3,7 @@ import { TypographyH2 } from "@/components/ui/typography";
 import { createServerSupabaseClient } from "@/lib/server-utils";
 import { redirect } from "next/navigation";
 import AddSpeciesDialog from "./add-species-dialog";
-import SpeciesCard from "./species-card";
+import SpeciesListClient from "./pageClient";
 
 export default async function SpeciesList() {
   // Create supabase server component client and obtain user session from stored cookie
@@ -22,6 +22,11 @@ export default async function SpeciesList() {
 
   const { data: species } = await supabase.from("species").select("*").order("id", { ascending: false });
 
+  if (!species) {
+    console.error("Error fetching species from Supabase");
+    return <p className="text-red-500">Failed to load species.</p>;
+  }
+
   return (
     <>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
@@ -29,9 +34,9 @@ export default async function SpeciesList() {
         <AddSpeciesDialog userId={sessionId} />
       </div>
       <Separator className="my-4" />
-      <div className="flex flex-wrap justify-center">
-        {species?.map((species) => <SpeciesCard key={species.id} species={species} />)}
-      </div>
+
+      {/* Pass species & sessionId to the Client Component */}
+      <SpeciesListClient species={species} sessionId={sessionId} />
     </>
   );
 }
