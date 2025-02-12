@@ -1,14 +1,14 @@
-"use client"; // ✅ Mark this as a Client Component
+"use client"; //  Mark this as a Client Component
 
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import SpeciesCard from "./species-card";
-import type { Database } from "@/lib/schema"; // ✅ Import correct schema
+import type { Database } from "@/lib/schema"; // Import correct schema
 
 type Species = Database["public"]["Tables"]["species"]["Row"];
 
 interface SpeciesListClientProps {
-  species: Species[]; // ✅ Ensure species is an array of the correct type
+  species: Species[]; // Ensure species is an array of the correct type
   sessionId: string;
 }
 

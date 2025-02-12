@@ -12,51 +12,18 @@ can cause errors with matching props and state in child components if the list o
 */
 import EditSpeciesDialog from "@/components/EditSpeciesDialog";
 import SpeciesDetailsDialog from "@/components/SpeciesDetailsDialog";
-import { Button } from "@/components/ui/button"; // button
-import { toast } from "@/components/ui/use-toast"; // toast notif.
-import { createBrowserSupabaseClient } from "@/lib/client-utils"; // supabase client
 import type { Database } from "@/lib/schema";
 import Image from "next/image";
-import { useState } from "react";
 
 type Species = Database["public"]["Tables"]["species"]["Row"];
 
 interface SpeciesCardProps {
-  species: Species; // ✅ Explicitly define 'species' prop
-  sessionId: string; // ✅ Explicitly define 'sessionId' prop
+  species: Species;
+  sessionId: string;
 }
 
 export default function SpeciesCard({ species, sessionId }: SpeciesCardProps) {
   const isAuthor = species.author === sessionId; // Check if the user is the author
-  const supabase = createBrowserSupabaseClient(); // Initialize Supabase
-  const [loading, setLoading] = useState(false);
-
-  {
-    /* The Delete button function*/
-  }
-
-  const handleDelete = async () => {
-    setLoading(true);
-
-    const { error } = await supabase.from("species").delete().eq("id", species.id);
-
-    if (error) {
-      toast({
-        title: "Error deleting species",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Species deleted",
-        description: `${species.scientific_name} has been removed.`,
-      });
-
-      window.location.reload();
-    }
-
-    setLoading(false);
-  };
 
   return (
     <div className="m-4 w-72 min-w-72 flex-none rounded border-2 p-3 shadow">
@@ -71,15 +38,8 @@ export default function SpeciesCard({ species, sessionId }: SpeciesCardProps) {
       {/* Replace the button with the detailed view dialog. */}
       <SpeciesDetailsDialog species={species} />
 
-      {/* Show Edit and Delete buttons ONLY if the user is the author */}
-      {isAuthor && (
-        <div className="mt-3 flex justify-between">
-          <EditSpeciesDialog species={species} />
-          <Button variant="destructive" onClick={() => void handleDelete()} disabled={loading}>
-            {loading ? "Deleting..." : "Delete"}
-          </Button>
-        </div>
-      )}
+      {/* Show EditSpeciesDialog ONLY if the user is the author */}
+      {isAuthor && <EditSpeciesDialog species={species} />}
     </div>
   );
 }
