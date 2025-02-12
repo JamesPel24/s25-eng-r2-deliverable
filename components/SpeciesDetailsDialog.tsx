@@ -26,8 +26,8 @@ export default function SpeciesDetailsDialog({ species }: { species: Species }) 
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{species.common_name || species.scientific_name}</DialogTitle>
-          <DialogDescription>{species.description || "No description available."}</DialogDescription>
+        <DialogTitle>{species.common_name ?? species.scientific_name}</DialogTitle>
+        <DialogDescription>{species.description ?? "No description available."}</DialogDescription>
         </DialogHeader>
         <div className="mt-4 space-y-2">
           <p>
