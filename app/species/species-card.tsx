@@ -75,7 +75,7 @@ export default function SpeciesCard({ species, sessionId }: SpeciesCardProps) {
       {isAuthor && (
         <div className="mt-3 flex justify-between">
           <EditSpeciesDialog species={species} />
-          <Button variant="destructive" onClick={handleDelete} disabled={loading}>
+          <Button variant="destructive" onClick={() => void handleDelete()} disabled={loading}>
             {loading ? "Deleting..." : "Delete"}
           </Button>
         </div>
